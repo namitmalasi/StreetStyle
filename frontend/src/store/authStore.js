@@ -3,6 +3,7 @@ import { create } from "zustand";
 const useAuthStore = create((set) => ({
   user: null,
   token: localStorage.getItem("token"),
+  checkingAuth: false,
 
   logout: () => {
     localStorage.removeItem("token");
@@ -40,6 +41,19 @@ const useAuthStore = create((set) => ({
     set({ user: data.user, token: data.token });
     localStorage.setItem("token", data.token);
     return data;
+  },
+  checkAuth: async () => {
+    const token = useAuthStore.getState().token;
+    set({ checkingAuth: true });
+    try {
+      const response = await fetch("/auth/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      set({ user: data.user, checkingAuth: false });
+    } catch (error) {
+      set({ checkingAuth: false, user: null });
+    }
   },
 }));
 
