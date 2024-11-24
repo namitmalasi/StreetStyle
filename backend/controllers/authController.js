@@ -44,7 +44,7 @@ export const LoginUser = async (req, res) => {
 };
 
 // logout functionality to be completed
-export const logoutUser = async (req, res) => {
+export const LogoutUser = async (req, res) => {
   try {
     res.status(200).json({ message: "Logout successful" });
   } catch (error) {
